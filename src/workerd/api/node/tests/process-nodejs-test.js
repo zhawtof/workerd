@@ -6,3 +6,17 @@ export const processPlatform = {
     assert.ok(['darwin', 'win32', 'linux'].includes(process.platform));
   },
 };
+
+process.env.BAZ = 1;
+const env = { ...process.env };
+
+export const processEnv = {
+  async test() {
+    assert.strictEqual(env.FOO, 'BAR');
+    assert.strictEqual(env.BAR, '{}');
+    assert.strictEqual(env.BAZ, '1');
+
+    const { FOO } = await import('mod');
+    assert.strictEqual(FOO, 'BAR');
+  },
+};

@@ -626,6 +626,9 @@ static v8::Local<v8::Value> createBindingValue(JsgWorkerdIsolate::Lock& lock,
     KJ_CASE_ONEOF(json, Global::Json) {
       v8::Local<v8::String> string = lock.wrap(context, kj::mv(json.text));
       value = jsg::check(v8::JSON::Parse(context, string));
+      if (featureFlags.getPopulateProcessEnv() && featureFlags.getNodeJsCompat()) {
+        lock.setEnvField(lock.str(global.name), jsg::JsValue(string));
+      }
     }
 
     KJ_CASE_ONEOF(pipeline, Global::Fetcher) {
@@ -711,6 +714,9 @@ static v8::Local<v8::Value> createBindingValue(JsgWorkerdIsolate::Lock& lock,
 
     KJ_CASE_ONEOF(text, kj::String) {
       value = lock.wrap(context, kj::mv(text));
+      if (featureFlags.getPopulateProcessEnv() && featureFlags.getNodeJsCompat()) {
+        lock.setEnvField(lock.str(global.name), jsg::JsValue(value));
+      }
     }
 
     KJ_CASE_ONEOF(data, kj::Array<byte>) {

@@ -679,4 +679,11 @@ struct CompatibilityFlags @0x8f8c1b68151b6cef {
       $compatDisableFlag("cache_no_cache_disabled")
       $experimental;
   # Enables the use of cache: no-cache in the fetch api.
+
+  populateProcessEnv @71 :Bool
+      $compatEnableFlag("nodejs_compat_populate_process_env")
+      $compatDisableFlag("nodejs_compat_dot_not_populate_process_env")
+      $compatEnableDate("2025-02-03");
+  # Automatically populate process.env from text and json bindings
+  # when nodejs_compat is being used.
 }
